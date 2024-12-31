@@ -1,0 +1,78 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title>Commande #{{ order.id }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="order-summary">
+    <div class="status-badge" [style.backgroundColor]="order.statusColor">
+      <ion-icon [name]="order.statusIcon" size="large"></ion-icon>
+    </div>
+    <div class="order-info">
+      <h2>{{ order.status }}</h2>
+      <p>
+        <ion-icon name="calendar-outline"></ion-icon>
+        Commandé le: {{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}
+      </p>
+      <p>
+        <ion-icon name="time-outline"></ion-icon>
+        Livraison prévue: {{ order.deliveryDate | date:'dd/MM/yyyy HH:mm' }}
+      </p>
+      <p>
+        <ion-icon name="location-outline"></ion-icon>
+        {{ order.location }}
+      </p>
+    </div>
+  </div>
+
+  <div class="delivery-person">
+    <ion-icon [name]="order.deliveryPerson.vehicleType === 'moto' ? 'bicycle-outline' : 'car-outline'" size="large"></ion-icon>
+    <div>
+      <h3>Livreur</h3>
+      <p>{{ order.deliveryPerson.name }}</p>  <p>{{ order.deliveryPerson.phone }}</p>
+    </div>
+  </div>
+
+  <h3>Articles commandés</h3>
+  <ion-list>
+    <ion-item *ngFor="let item of order.items" lines="full">
+      <ion-thumbnail slot="start">
+        <img [src]="item.image" [alt]="item.name" (error)="handleImageError($event)">
+      </ion-thumbnail>
+      <ion-label>
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.description }}</p>
+        <p>
+          <ion-text color="medium">
+            {{ item.quantity }} x {{ item.price | currency:'EUR' }}
+          </ion-text>
+        </p>
+      </ion-label>
+      <ion-note slot="end" color="primary">
+        {{ item.quantity * item.price | currency:'EUR' }}
+      </ion-note>
+    </ion-item>
+  </ion-list>
+
+  <div class="total-section">
+    <div class="total-row">
+      <span>Sous-total</span>
+      <span>{{ order.total | currency:'EUR' }}</span>
+    </div>
+    <div class="total-row">
+      <span>Frais de livraison</span>
+      <span>{{ 2.99 | currency:'EUR' }}</span>
+    </div>
+    <div class="total-row grand-total">
+      <span>Total</span>
+      <span>{{ (order.total + 2.99) | currency:'EUR' }}</span>
+    </div>
+  </div>
+</ion-content>
+

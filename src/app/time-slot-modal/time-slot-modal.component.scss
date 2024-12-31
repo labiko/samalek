@@ -1,0 +1,222 @@
+// time-slot-modal.component.scss
+.delivery-status {
+    text-align: center;
+    padding: 20px;
+    background: var(--ion-color-light);
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .timeline {
+    padding: 20px 0;
+  
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+      padding: 10px 0;
+    }
+  
+    &-line {
+      width: 2px;
+      height: 30px;
+      background: var(--ion-color-medium);
+      margin-left: 18px;
+    }
+  
+    &-content {
+      flex: 1;
+  
+      h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+      }
+  
+      p {
+        margin: 5px 0 0;
+        color: var(--ion-color-medium);
+        font-size: 14px;
+      }
+    }
+  }
+  
+  .time-slot {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+  
+    ion-label {
+      h2 {
+        font-weight: 500;
+      }
+  
+      p {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--ion-color-medium);
+      }
+    }
+  
+    ion-button {
+      --border-radius: 8px;
+    }
+  }
+  
+  ion-list-header {
+    padding-bottom: 10px;
+    
+    ion-label {
+      font-weight: 600;
+      font-size: 18px;
+    }
+  }
+
+  .timeline {
+    position: relative;
+    padding: 20px 0;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: var(--ion-color-medium);
+  }
+  
+  .timeline-item {
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .timeline-badge {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.4em;
+    text-align: center;
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    margin-left: -25px;
+    background-color: var(--ion-color-light);
+    border: 3px solid var(--ion-color-medium);
+    border-radius: 50%;
+    z-index: 100;
+  }
+  
+  .timeline-badge.filled {
+    background-color: var(--ion-color-primary);
+    color: white;
+  }
+  
+  .timeline-panel {
+    width: calc(50% - 50px);
+    float: left;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    background: white;
+  }
+  
+  .timeline-title {
+    margin-top: 0;
+    color: var(--ion-color-dark);
+  }
+  
+  .timeline-body p {
+    margin-bottom: 0;
+    color: var(--ion-color-medium);
+  }
+  
+  .timeline-item.active .timeline-panel {
+    border-color: var(--ion-color-primary);
+  }
+  
+  .timeline-item.active .timeline-badge {
+    background-color: var(--ion-color-primary);
+    color: white;
+    border-color: var(--ion-color-primary);
+  }
+  
+  .timeline {
+    position: relative;
+    padding: 20px 0;
+  }
+  
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: var(--ion-color-medium);
+  }
+  
+  .timeline-item {
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .timeline-badge {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.4em;
+    text-align: center;
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    margin-left: -25px;
+    background-color: var(--ion-color-light);
+    border: 3px solid var(--ion-color-medium);
+    border-radius: 50%;
+    z-index: 100;
+  }
+  
+  .timeline-badge.filled {
+    background-color: var(--ion-color-primary);
+    color: white;
+  }
+  
+  .timeline-panel {
+    width: calc(50% - 50px);
+    float: left;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.1);
+    background: white;
+  }
+  
+  .timeline-title {
+    margin-top: 0;
+    color: var(--ion-color-dark);
+  }
+  
+  .timeline-body p {
+    margin-bottom: 0;
+    color: var(--ion-color-medium);
+  }
+  
+  .timeline-item.active .timeline-panel {
+    border-color: var(--ion-color-primary);
+  }
+  
+  .timeline-item.active .timeline-badge {
+    background-color: var(--ion-color-primary);
+    color: white;
+    border-color: var(--ion-color-primary);
+  }
+  
+  

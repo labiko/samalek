@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Planning de livraison</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2 class="ion-text-center">Choisissez votre créneau de livraison</h2>
+  
+  <div class="timeline">
+    <div *ngFor="let slot of timeSlots; let i = index" class="timeline-item" [class.active]="slot.selected" [class.disabled]="slot.disabled">
+      <div class="timeline-badge" [class.filled]="slot.availability > 0 && !slot.disabled">
+        <ion-icon name="time-outline"></ion-icon>
+      </div>
+      <div class="timeline-panel">
+        <div class="timeline-heading">
+          <h4 class="timeline-title">{{ slot.time }}</h4>
+        </div>
+        <div class="timeline-body">
+          <p>
+            <ion-icon name="people-outline"></ion-icon>
+            {{ slot.availability }} places disponibles
+          </p>
+          <ion-button expand="block" (click)="selectTimeSlot(slot)" [disabled]="slot.disabled || slot.availability === 0">
+            {{ slot.selected ? 'Sélectionné' : (slot.disabled ? 'Non disponible' : 'Choisir') }}
+          </ion-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>
+

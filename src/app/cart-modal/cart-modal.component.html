@@ -20,7 +20,7 @@
             </ion-thumbnail>
             <ion-label>
               <h2>{{ item.libelle }}</h2>
-              <p>{{ item.prix | currency:'GNF':'symbol':'1.0-0' }}</p>
+              <p>{{ item.prix | currency:'EUR':'symbol':'1.0-0' }}</p>
             </ion-label>
             <ion-note slot="end">
               <ion-button fill="clear" (click)="decrementQuantity(item.id)">
@@ -57,11 +57,19 @@
 
   <ion-footer *ngIf="cartItems.length > 0">
     <ion-toolbar>
-      <ion-button expand="block" (click)="checkout()">
-        Procéder au paiement
-        <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+      <ion-button expand="block" (click)="checkout()" [disabled]="isLoading">
+        <ng-container *ngIf="!isLoading">
+          Procéder au paiement
+          <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+        </ng-container>
+        <ng-container *ngIf="isLoading">
+          <ion-spinner name="crescent"></ion-spinner>
+          <span class="loading-text">{{ loadingMessage }}</span>
+        </ng-container>
       </ion-button>
     </ion-toolbar>
   </ion-footer>
+  
+  
 </ng-container>
 

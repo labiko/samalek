@@ -1,17 +1,60 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Tab 2
-    </ion-title>
+    <ion-title>Récapitulatif des commandes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-segment (ionChange)="segmentChanged($event)" value="current">
+    <ion-segment-button value="current">
+      <ion-label>En cours</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="history">
+      <ion-label>Historique</ion-label>
+    </ion-segment-button>
+  </ion-segment>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <div class="ion-padding">
+    <h2 class="ion-text-center">{{ selectedSegment === 'current' ? 'Commandes en cours' : 'Historique des commandes' }}</h2>
+    
+    <div class="order-timeline">
+      <div *ngFor="let order of getFilteredOrders(); let i = index" class="order-item">
+        <div class="order-badge" [style.backgroundColor]="order.statusColor">
+          <ion-icon [name]="order.statusIcon"></ion-icon>
+        </div>
+        <div class="order-panel">
+          <div class="order-heading">
+            <h4 class="order-title">{{ order.id }}</h4>
+            <p class="order-date">
+              Commandé le: {{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+            <p class="order-date">
+              Livraison prévue: {{ order.deliveryDate | date:'dd/MM/yyyy HH:mm' }}
+            </p>
+            <p class="order-location">
+              <ion-icon name="location-outline"></ion-icon>
+              {{ order.location }}
+            </p>
+          </div>
+          <div class="order-body">
+            <p class="order-status">
+              <ion-icon [name]="order.statusIcon" [style.color]="order.statusColor"></ion-icon>
+              {{ order.status }}
+            </p>
+            <p class="order-items">{{ order.items.length }} articles</p>
+            <p class="order-total">Total: {{ order.total | currency:'EUR' }}</p>
+            <ion-button expand="block" (click)="viewOrderDetails(order)">
+              Voir les détails
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
+
