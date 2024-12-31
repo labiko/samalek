@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Votre Panier ({{ totalItems$ | async }} articles)</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ng-container *ngIf="cartItems$ | async as cartItems">
+  <ion-content class="ion-padding">
+    <ng-container *ngIf="cartItems.length > 0; else emptyCart">
+      <ion-list>
+        <ion-item-sliding *ngFor="let item of cartItems">
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img [src]="item.image" [alt]="item.libelle" (error)="handleImageError($event)">
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.libelle }}</h2>
+              <p>{{ item.prix | currency:'GNF':'symbol':'1.0-0' }}</p>
+            </ion-label>
+            <ion-note slot="end">
+              <ion-button fill="clear" (click)="decrementQuantity(item.id)">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+              <span>{{ item.quantite }}</span>
+              <ion-button fill="clear" (click)="incrementQuantity(item.id)">
+                <ion-icon name="add-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-note>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="removeItem(item.id)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+
+      <div class="total-section">
+        <ion-text color="medium">Total</ion-text>
+        <ion-text color="dark" class="total-price">{{ totalPrice$ | async | currency:'GNF':'symbol':'1.0-0' }}</ion-text>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyCart>
+      <div class="empty-cart">
+        <ion-icon name="cart-outline" class="large-icon"></ion-icon>
+        <h2>Votre panier est vide</h2>
+        <p>Ajoutez des articles pour commencer vos achats</p>
+      </div>
+    </ng-template>
+  </ion-content>
+
+  <ion-footer *ngIf="cartItems.length > 0">
+    <ion-toolbar>
+      <ion-button expand="block" (click)="checkout()">
+        Procéder au paiement
+        <ion-icon name="arrow-forward-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+</ng-container>
+
