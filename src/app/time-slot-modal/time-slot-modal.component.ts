@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { IonicModule, ModalController, Platform } from '@ionic/angular';
-// import { Geolocation } from '@capacitor/geolocation';
+import { AlertController, IonicModule, LoadingController, ModalController, Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
 interface TimeSlot {
   time: string;
+  date: Date;
   availability: number;
   selected: boolean;
   disabled: boolean;
@@ -22,49 +23,80 @@ interface TimeSlot {
 })
 export class TimeSlotModalComponent implements OnInit {
   timeSlots: TimeSlot[] = [
-    { time: '08:00 - 10:00', availability: 5, selected: false, disabled: true },
-    { time: '10:00 - 12:00', availability: 3, selected: false, disabled: true },
-    { time: '12:00 - 14:00', availability: 0, selected: false, disabled: false },
-    { time: '14:00 - 16:00', availability: 7, selected: false, disabled: false },
-    { time: '16:00 - 18:00', availability: 2, selected: false, disabled: false },
-    { time: '18:00 - 20:00', availability: 4, selected: false, disabled: false },
+    { time: '08:00 - 10:00', date: new Date('2023-05-20'), availability: 5, selected: false, disabled: false },
+    { time: '10:00 - 12:00', date: new Date('2023-05-20'), availability: 3, selected: false, disabled: false },
+    { time: '12:00 - 14:00', date: new Date('2023-05-20'), availability: 0, selected: false, disabled: false },
+    { time: '14:00 - 16:00', date: new Date('2023-05-21'), availability: 7, selected: false, disabled: false },
+    { time: '16:00 - 18:00', date: new Date('2023-05-21'), availability: 2, selected: false, disabled: false },
+    { time: '18:00 - 20:00', date: new Date('2023-05-21'), availability: 4, selected: false, disabled: false },
   ];
 
   distance: number = 0;
   duration: number = 0;
   deliveryAddress: string = '';
+  selectedSlot: TimeSlot | null = null;
+  totalPrice: number = 159.000;
 
   constructor(
     private modalController: ModalController,
-    private platform: Platform,
+    private loadingController: LoadingController,
+    private alertController: AlertController,private router: Router
   ) { }
 
-  selectTimeSlot(selectedSlot: TimeSlot) {
-    if (selectedSlot.disabled || selectedSlot.availability === 0) {
-      return; // Ne rien faire si le créneau est désactivé ou complet
+  selectTimeSlot(slot: TimeSlot) {
+    if (slot.disabled || slot.availability === 0) {
+      return;
     }
 
-    // Désélectionner tous les autres créneaux
-    this.timeSlots.forEach(slot => {
-      if (slot !== selectedSlot) {
-        slot.selected = false;
-      }
-    });
-
-    // Sélectionner le créneau choisi
-    selectedSlot.selected = true;
+    this.timeSlots.forEach(s => s.selected = false);
+    slot.selected = true;
+    this.selectedSlot = slot;
   }
 
-  dismiss() {
-    // Récupérer le créneau sélectionné
-    const selectedSlot = this.timeSlots.find(slot => slot.selected);
+  async validateSelection() {
+    if (this.selectedSlot) {
+      const loading = await this.loadingController.create({
+        message: 'Confirmation de votre commande...',
+        duration: 3000
+      });
 
-    // Fermer le modal et passer le créneau sélectionné en données de retour
-    this.modalController.dismiss({
-      selectedTimeSlot: selectedSlot
-    });
+      await loading.present();
+
+      await loading.onDidDismiss();
+
+      const alert = await this.alertController.create({
+        header: 'Commande confirmée !',
+        subHeader: `Créneau sélectionné : ${this.selectedSlot.time}`,
+        message: `Date : ${this.selectedSlot.date.toLocaleDateString()}
+                  Votre commande a été confirmée avec succès. Merci de votre confiance !`,
+        buttons: [],
+        cssClass: 'custom-alert'
+      });
+
+      await alert.present();
+
+      // Fermer l'alerte et toutes les modales en arrière-plan après 3 secondes, puis rediriger
+      setTimeout(async () => {
+        await alert.dismiss();
+        await this.modalController.dismiss({
+          selectedTimeSlot: this.selectedSlot
+        });
+        // Fermer toutes les modales en arrière-plan
+        const modalStack = document.getElementsByTagName('ion-modal');
+        for (let i = 0; i < modalStack.length; i++) {
+          (modalStack[i] as any).dismiss();
+        }
+        
+        // Redirection vers /tabs/tab2
+        this.router.navigate(['/tabs/tab2']);
+      }, 3000);
+    }
+  }
+  
+  dismiss() {
+    this.modalController.dismiss();
   }
 
   ngOnInit() { }
-
 }
+

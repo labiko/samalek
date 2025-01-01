@@ -3,7 +3,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, Input, OnInit } from '@angular/core'
 import { IonicModule, ModalController } from '@ionic/angular';
 interface Order {
   id: string;
-  orderDate: Date;
+  orderDate: Date;  
   deliveryDate: Date;
   status: string;
   statusColor: string;

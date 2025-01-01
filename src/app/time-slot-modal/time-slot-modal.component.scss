@@ -219,4 +219,233 @@
     border-color: var(--ion-color-primary);
   }
   
+  ion-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: transparent;
+  }
+  
+  ion-footer ion-toolbar {
+    --background: transparent;
+    --border-color: transparent;
+  }
+  
+  ion-footer ion-button {
+    margin: 16px;
+    --border-radius: 8px;
+  }
+  
+  
+  .timeline-item {
+    // ... (styles existants)
+  
+    &.active {
+      .timeline-panel {
+        border-color: var(--ion-color-success);
+      }
+      .timeline-badge {
+        background-color: var(--ion-color-success);
+      }
+    }
+  }
+  
+  .timeline-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    .slot-date {
+      font-size: 0.8em;
+      color: var(--ion-color-danger);
+    }
+  }
+  
+  ion-fab {
+    margin-bottom: 16px;
+    margin-right: 16px;
+  }
+  
+  ion-fab-button {
+    --size: 48px;
+  }
+  .custom-header {
+    ion-toolbar {
+      --background: var(--ion-color-primary);
+      --color: var(--ion-color-primary-contrast);
+    }
+  }
+  
+  .custom-content {
+    --background: #f4f5f8;
+  }
+  
+  .delivery-animation {
+    text-align: center;
+    margin-bottom: 20px;
+    
+    img {
+      max-width: 200px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+  }
+  
+  .main-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .total-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--ion-color-primary);
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+    border-radius: 8px;
+  }
+  
+  .timeline {
+    position: relative;
+    padding: 20px 0;
+  }
+  
+  :host {
+    --ion-padding: 16px;
+  }
+  
+  .main-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .timeline {
+    position: relative;
+    padding: 1rem 0;
+  }
+  
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+  
+    &.active .timeline-panel {
+      border: 2px solid var(--ion-color-success);
+    }
+  
+    &.disabled .timeline-panel {
+      opacity: 0.6;
+    }
+  }
+  
+  .timeline-content {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .timeline-badge {
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: var(--ion-color-medium);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-right: 1rem;
+    
+    &.filled {
+      background-color: var(--ion-color-primary);
+    }
+  }
+  
+  .timeline-panel {
+    flex-grow: 1;
+    background-color: var(--ion-color-light);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .timeline-heading {
+    margin-bottom: 0.5rem;
+  }
+  
+  .timeline-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .slot-date {
+    font-size: 0.8rem;
+    color: var(--ion-color-medium);
+    display: block;
+    margin-top: 0.25rem;
+  }
+  
+  .timeline-body {
+    .availability {
+      display: flex;
+      align-items: center;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+  
+      ion-icon {
+        margin-right: 0.5rem;
+      }
+    }
+  
+    ion-button {
+      font-size: 0.9rem;
+      --padding-top: 0.5rem;
+      --padding-bottom: 0.5rem;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    :host {
+      --ion-padding: 12px;
+    }
+  
+    .main-title {
+      font-size: 1rem;
+    }
+  
+    .timeline-badge {
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.75rem;
+    }
+  
+    .timeline-panel {
+      padding: 0.75rem;
+    }
+  
+    .timeline-title {
+      font-size: 0.9rem;
+    }
+  
+    .slot-date {
+      font-size: 0.7rem;
+    }
+  
+    .timeline-body {
+      .availability {
+        font-size: 0.8rem;
+      }
+  
+      ion-button {
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  
   

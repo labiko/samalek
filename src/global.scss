@@ -204,4 +204,57 @@ ion-modal.modal-auto-height {
 	}
   }
   
+  // src/global.scss
+
+.custom-alert {
+	--backdrop-opacity: 0.7;
   
+	.alert-wrapper {
+	  border-radius: 15px;
+	  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+	}
+  
+	.alert-head {
+	  padding-top: 20px;
+	  padding-bottom: 10px;
+	}
+  
+	.alert-title {
+	  font-size: 1.2em;
+	  font-weight: bold;
+	}
+  
+	.alert-sub-title {
+	  font-size: 1em;
+	  color: var(--ion-color-medium);
+	}
+  
+	.alert-message {
+	  font-size: 0.9em;
+	  color: var(--ion-color-dark);
+	  padding-bottom: 20px;
+	}
+  
+	.alert-button-group {
+	  padding: 10px;
+	}
+  
+	.alert-button {
+	  color: var(--ion-color-primary);
+	}
+  }
+  
+  .confirmation-modal {
+	--height: auto;
+	--width: 90%;
+	--max-width: 400px;
+	--border-radius: 16px;
+	--backdrop-opacity: 0.8;
+  }
+  
+  .confirmation-modal::part(content) {
+	border-radius: 16px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  }
+  
+	

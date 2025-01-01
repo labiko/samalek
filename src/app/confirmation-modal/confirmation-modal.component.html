@@ -1,0 +1,18 @@
+<ion-content class="ion-padding">
+  <div class="confirmation-container">
+    <img src="assets/confirm-27.svg" alt="Commande confirmée" class="confirmation-image">
+    <h2>Commande confirmée !</h2>
+    <p class="confirmation-details">
+      Date : {{ selectedSlot.date | date:'dd/MM/yyyy' }}<br>
+      Heure : {{ selectedSlot.time }}
+    </p>
+    <p class="confirmation-message">
+      Votre commande a été confirmée avec succès. Merci de votre confiance !
+    </p>
+    <div class="button-container">
+      <ion-button expand="block" (click)="confirm()">OK</ion-button>
+      <ion-button expand="block" fill="clear" (click)="cancel()">Annuler</ion-button>
+    </div>
+  </div>
+</ion-content>
+

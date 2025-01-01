@@ -30,7 +30,7 @@ export class Tab2Page {
   selectedSegment = 'current';
   orders: Order[] = [
     {
-      id: '1234567890',
+      id: '4434567890',
       orderDate: new Date('2023-05-14T10:30:00'),
       deliveryDate: new Date('2023-05-15T14:30:00'),
       status: 'En cours de livraison',
@@ -50,7 +50,7 @@ export class Tab2Page {
       }
     },
     {
-      id: '2345678901',
+      id: '4545678901',
       orderDate: new Date('2023-05-13T15:45:00'),
       deliveryDate: new Date('2023-05-14T11:00:00'),
       status: 'En préparation',
@@ -71,7 +71,7 @@ export class Tab2Page {
       }
     },
     {
-      id: '3456789012',
+      id: '4656789012',
       orderDate: new Date('2023-05-13T09:15:00'),
       deliveryDate: new Date('2023-05-14T14:00:00'),
       status: 'Prêt à être livré',
@@ -90,7 +90,7 @@ export class Tab2Page {
       }
     },
     {
-      id: '4567890123',
+      id: '4767890123',
       orderDate: new Date('2023-05-01T09:15:00'),
       deliveryDate: new Date('2023-05-02T14:00:00'),
       status: 'Livré',
@@ -110,15 +110,62 @@ export class Tab2Page {
         vehicleType: 'moto',
         phone: '+33 6 12 34 56 78'
       }
+    },
+    {
+      id: '4867890123',
+      orderDate: new Date('2023-05-01T09:15:00'),
+      deliveryDate: new Date('2023-05-02T14:00:00'),
+      status: 'Livré',
+      statusColor: '#28ba62',
+      statusIcon: 'checkmark-circle',
+      items: [
+        { name: 'Pâtes Carbonara', description: 'Spaghetti, œuf, pancetta, parmesan', quantity: 2, price: 13.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Bruschetta', description: 'Pain grillé, tomates, ail, huile dolive', quantity: 1, price: 7.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Vin Rouge', description: 'Bouteille 75cl', quantity: 1, price: 19.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Panna Cotta', description: 'Dessert italien à la crème', quantity: 2, price: 5.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Café Espresso', description: 'Double shot', quantity: 2, price: 2.50, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' }
+      ],
+      total: 72.94,
+      location: 'Boulevard Saint-Michel, Paris',
+      deliveryPerson: {
+        name: 'John Doe',
+        vehicleType: 'moto',
+        phone: '+33 6 12 34 56 78'
+      }
+    },
+
+    {
+      id: '4967890123',
+      orderDate: new Date('2023-05-01T09:15:00'),
+      deliveryDate: new Date('2023-05-02T14:00:00'),
+      status: 'Annulé',
+      statusColor: '#eb445a',
+      statusIcon: 'close-circle',
+      items: [
+        { name: 'Pâtes Carbonara', description: 'Spaghetti, œuf, pancetta, parmesan', quantity: 2, price: 13.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Bruschetta', description: 'Pain grillé, tomates, ail, huile dolive', quantity: 1, price: 7.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Vin Rouge', description: 'Bouteille 75cl', quantity: 1, price: 19.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Panna Cotta', description: 'Dessert italien à la crème', quantity: 2, price: 5.99, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' },
+        { name: 'Café Espresso', description: 'Double shot', quantity: 2, price: 2.50, image: 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80' }
+      ],
+      total: 72.94,
+      location: 'Boulevard Saint-Michel, Paris',
+      deliveryPerson: {
+        name: 'John Doe',
+        vehicleType: 'moto',
+        phone: '+33 6 12 34 56 78'
+      }
     }
   ];
 
-
   getFilteredOrders(): Order[] {
     if (this.selectedSegment === 'current') {
-      return this.orders.filter(order => order.status !== 'Livré');
-    } else {
+      return this.orders.filter(order => order.status == 'En préparation');
+    } else if (this.selectedSegment === 'history') {
       return this.orders.filter(order => order.status === 'Livré');
+    }
+    else {
+      return this.orders.filter(order => order.status === 'Annulé');
     }
   }
 
