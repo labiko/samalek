@@ -1,0 +1,49 @@
+<ion-content>
+  <div class="signup-container">
+    <div class="signup-content">
+      <div class="avatar-container">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </div>
+
+      <h1>Bienvenue</h1>
+      <p>Connectez-vous pour continuer</p>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+        <div class="input-group">
+          <ion-icon name="mail-outline" color="medium"></ion-icon>
+          <!-- <ion-input type="email" placeholder="Email" formControlName="email"></ion-input> -->
+          <ion-input type="tel" placeholder="Téléphone" formControlName="telephone"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <ion-icon name="lock-closed-outline" color="medium"></ion-icon>
+          <ion-input type="password" placeholder="Mot de passe" formControlName="password"></ion-input>
+        </div>
+
+        <ion-button expand="block" type="submit" [disabled]="!loginForm.valid">
+          <ion-icon name="log-in-outline" slot="start"></ion-icon>
+          Se connecter
+        </ion-button>
+      </form>
+
+      <div class="signup-link">
+        <p>Vous n'avez pas de compte ?</p>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-button expand="block" fill="clear" (click)="openRegisterModal()">S'inscrire</ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button expand="block" fill="clear" color="danger" (click)="dismiss()">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                Fermer
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+      
+    </div>
+  </div>
+</ion-content>
+

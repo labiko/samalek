@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { AlertController, IonicModule, ModalController } from '@ionic/angular';
 import { OrderDetailsModalComponent } from '../order-details-modal/order-details-modal.component';
 
 interface Order {
@@ -28,6 +28,7 @@ interface Order {
 })
 export class Tab2Page {
   selectedSegment = 'current';
+  
   orders: Order[] = [
     {
       id: '4434567890',
@@ -169,7 +170,7 @@ export class Tab2Page {
     }
   }
 
-  constructor(private modalController: ModalController) { }
+  constructor(private modalController: ModalController,private alertController : AlertController) { }
 
   ngOnInit() { }
 
@@ -190,6 +191,45 @@ export class Tab2Page {
 
   segmentChanged(event: any) {
     this.selectedSegment = event.detail.value;
+  }
+
+  async showCancelConfirmation(order: Order) {
+    const alert = await this.alertController.create({
+      header: 'Confirmation',
+      message: 'Êtes-vous sûr de vouloir annuler cette commande ?',
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Annulation abandonnée');
+          }
+        }, {
+          text: 'Oui',
+          handler: () => {
+            this.cancelOrder(order);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  
+
+  cancelOrder(order: Order) {
+    // Mettez à jour le statut de la commande
+    order.status = 'Annulé';
+    order.statusColor = '#eb445a';
+    order.statusIcon = 'close-circle';
+
+    // Vous pouvez ajouter ici une logique supplémentaire, comme envoyer une requête à un serveur
+    console.log('Commande annulée:', order);
+
+    // Rafraîchir la liste des commandes
+    this.getFilteredOrders();
   }
 
 }

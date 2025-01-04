@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { AlertController, IonicModule, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { DeliveryModeModalComponent } from '../delivery-mode-modal/delivery-mode-modal.component';
 interface TimeSlot {
   time: string;
   date: Date;
@@ -55,44 +56,24 @@ export class TimeSlotModalComponent implements OnInit {
 
   async validateSelection() {
     if (this.selectedSlot) {
-      const loading = await this.loadingController.create({
-        message: 'Confirmation de votre commande...',
-        duration: 3000
+      const deliveryModeModal = await this.modalController.create({
+        component: DeliveryModeModalComponent,
+        cssClass: 'delivery-mode-modal'
       });
-
-      await loading.present();
-
-      await loading.onDidDismiss();
-
-      const alert = await this.alertController.create({
-        header: 'Commande confirmée !',
-        subHeader: `Créneau sélectionné : ${this.selectedSlot.time}`,
-        message: `Date : ${this.selectedSlot.date.toLocaleDateString()}
-                  Votre commande a été confirmée avec succès. Merci de votre confiance !`,
-        buttons: [],
-        cssClass: 'custom-alert'
-      });
-
-      await alert.present();
-
-      // Fermer l'alerte et toutes les modales en arrière-plan après 3 secondes, puis rediriger
-      setTimeout(async () => {
-        await alert.dismiss();
-        await this.modalController.dismiss({
-          selectedTimeSlot: this.selectedSlot
+  
+      await deliveryModeModal.present();
+  
+      const { data } = await deliveryModeModal.onDidDismiss();
+      
+      if (data && data.deliveryMode) {
+        // Fermer la modal actuelle et renvoyer les informations sélectionnées
+        this.modalController.dismiss({
+          selectedTimeSlot: this.selectedSlot,
+          deliveryMode: data.deliveryMode
         });
-        // Fermer toutes les modales en arrière-plan
-        const modalStack = document.getElementsByTagName('ion-modal');
-        for (let i = 0; i < modalStack.length; i++) {
-          (modalStack[i] as any).dismiss();
-        }
-        
-        // Redirection vers /tabs/tab2
-        this.router.navigate(['/tabs/tab2']);
-      }, 3000);
+      }
     }
   }
-  
   dismiss() {
     this.modalController.dismiss();
   }

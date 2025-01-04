@@ -9,63 +9,70 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-segment (ionChange)="segmentChanged($event)" value="current">
+<ion-content class="ion-padding">
+  <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)" mode="ios" class="custom-segment">
     <ion-segment-button value="current">
+      <ion-icon name="hourglass-outline"></ion-icon>
       <ion-label>En cours</ion-label>
     </ion-segment-button>
     <ion-segment-button value="history">
+      <ion-icon name="time-outline"></ion-icon>
       <ion-label>Historique</ion-label>
     </ion-segment-button>
     <ion-segment-button value="cancelled">
+      <ion-icon name="close-circle-outline"></ion-icon>
       <ion-label>Annulées</ion-label>
     </ion-segment-button>
   </ion-segment>
 
-  <div class="ion-padding">
-    <h2 class="ion-text-center">
-      {{ 
-        selectedSegment === 'current' ? 'Commandes en cours' : 
-        selectedSegment === 'history' ? 'Historique des commandes' : 
-        'Commandes annulées'
-      }}
-    </h2>
+  <h2 class="section-title">
+    {{
+    selectedSegment === 'current' ? 'Commandes en cours' :
+    selectedSegment === 'history' ? 'Historique des commandes' :
+    'Commandes annulées'
+    }}
+  </h2>
 
-    <div class="order-timeline">
-      <div *ngFor="let order of getFilteredOrders(); let i = index" class="order-item">
-        <div class="order-content">
-          <div class="order-badge" [style.backgroundColor]="order.statusColor">
-            <ion-icon [name]="order.statusIcon"></ion-icon>
-          </div>
-          <div class="order-panel">
-            <div class="order-heading">
-              <h4 class="order-title">{{ order.id }}</h4>
-              <p class="order-date">
-                Commandé le: {{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}
-              </p>
-              <p class="order-date">
-                Livraison prévue: {{ order.deliveryDate | date:'dd/MM/yyyy HH:mm' }}
-              </p>
-              <p class="order-location">
-                <ion-icon name="location-outline"></ion-icon>
-                {{ order.location }}
-              </p>
-            </div>
-            <div class="order-body">
-              <p class="order-status">
-                <ion-icon [name]="order.statusIcon" [style.color]="order.statusColor"></ion-icon>
-                {{ order.status }}
-              </p>
-              <p class="order-items">{{ order.items.length }} articles</p>
-              <p class="order-total">Total: {{ order.total | currency:'EUR' }}</p>
-              <ion-button expand="block" (click)="viewOrderDetails(order)">
-                Voir les détails
-              </ion-button>
-            </div>
-          </div>
+  <div class="timeline" style=" margin-left: -12px ">
+    <div *ngFor="let order of getFilteredOrders(); let i = index" class="timeline-item">
+      <div class="timeline-badge" [style.backgroundColor]="order.statusColor">
+        <ion-icon [name]="order.statusIcon"></ion-icon>
+      </div>
+      <div class="timeline-content">
+        <h3 class="timeline-title">Commande #{{ order.id }}</h3>
+        <p class="timeline-status" [ngClass]="{'preparing-animation': order.status === 'En préparation'}">
+          <ion-icon *ngIf="order.status === 'En préparation'" name="restaurant-outline"
+            class="preparing-icon"></ion-icon>
+          {{ order.status }}
+          <span *ngIf="order.status === 'En préparation'" class="preparing-dots"></span>
+        </p>
+
+        <div class="timeline-details">
+          <p><ion-icon name="calendar-outline"></ion-icon> {{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p><ion-icon name="time-outline"></ion-icon> {{ order.deliveryDate | date:'dd/MM/yyyy HH:mm' }}</p>
+          <p><ion-icon name="location-outline"></ion-icon> {{ order.location }}</p>
+          <p><ion-icon name="cart-outline"></ion-icon> {{ order.items.length }} articles</p>
+          <p><ion-icon name="cash-outline"></ion-icon> {{ order.total | currency:'EUR' }}</p>
         </div>
+
+        <ion-grid class="timeline-actions">
+          <ion-row>
+            <ion-col [size]="order.status !== 'En préparation' ? 12 : 12"
+              [sizeMd]="order.status !== 'En préparation' ? 12 : 6">
+              <ion-button expand="block" (click)="viewOrderDetails(order)">
+                <ion-icon name="eye-outline" slot="start"></ion-icon>
+                détails
+              </ion-button>
+            </ion-col>
+            <ion-col size="12" size-md="6" *ngIf="order.status === 'En préparation'">
+              <ion-button expand="block" color="danger" (click)="showCancelConfirmation(order)">
+                <ion-icon name="trash-outline" slot="start"></ion-icon>
+                Annuler
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
     </div>
   </div>
 </ion-content>
-

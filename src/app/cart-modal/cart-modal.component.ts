@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { PaiementSelectComponent } from '../paiement-select/paiement-select.component';
+import { LoginModalPage } from '../login-modal/login-modal.page';
 interface CartItem {
   id: number;
   libelle: string;
@@ -54,19 +55,37 @@ export class CartModalComponent implements OnInit {
     this.modalController.dismiss();
   }
 
+  // async checkout() {
+  //   this.isLoading = true;
+  //   this.loadingMessage = 'Initialisation du paiement...';
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  //   this.loadingMessage = 'Vérification du panier...';
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  //   this.loadingMessage = 'Finalisation de la transaction...';
+  //   await new Promise(resolve => setTimeout(resolve, 1000));
+  //   // Ajoutez ici la logique de paiement réelle
+  //   this.isLoading = false;
+  //   this.loadingMessage = 'Traitement en cours...'; // Réinitialiser le message
+  //   this.OpenModalPaiementSelect();
+  // }
+
   async checkout() {
-    this.isLoading = true;
-    this.loadingMessage = 'Initialisation du paiement...';
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    this.loadingMessage = 'Vérification du panier...';
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    this.loadingMessage = 'Finalisation de la transaction...';
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // Ajoutez ici la logique de paiement réelle
-    this.isLoading = false;
-    this.loadingMessage = 'Traitement en cours...'; // Réinitialiser le message
-    this.OpenModalPaiementSelect();
+    const modal = await this.modalController.create({
+      component: LoginModalPage,
+       cssClass: 'fullscreen-modal'
+    });
+
+    modal.onDidDismiss().then((result) => {
+      if (result && result.data && result.data.logged) {
+        // L'utilisateur s'est connecté avec succès
+        console.log('Utilisateur connecté, procéder au paiement');
+        // Ajoutez ici la logique pour passer au paiement
+      }
+    });
+
+    return await modal.present();
   }
+
 
   handleImageError(event: any) {
     event.target.src = 'https://images.unsplash.com/photo-1604495772376-9657f0035eb5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1920&q=80'; // Remplacez par le chemin de votre image par défaut

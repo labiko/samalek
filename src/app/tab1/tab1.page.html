@@ -1,36 +1,100 @@
-<ion-header>
+<ion-header class="ion-no-border">
   <ion-toolbar color="primary">
-    <ion-title>Nos Produits</ion-title>
+
+<ion-buttons slot="start">
+  <ion-menu-button auto-hide="false"></ion-menu-button>
+</ion-buttons>
+
+    <ion-title *ngIf="!isSearchBarVisible" class="ion-text-center">Nos Produits</ion-title>
+    <ion-searchbar *ngIf="isSearchBarVisible"
+                   [(ngModel)]="searchTerm" 
+                   (ionInput)="onSearchChange()" 
+                   [debounce]="300" 
+                   placeholder="Rechercher" 
+                   class="custom-searchbar"
+                   [@slideInOut]>
+    </ion-searchbar>
+
     <ion-buttons slot="end">
+      <!-- <ion-button (click)="toggleDarkMode()">
+        <ion-icon [name]="isDarkMode ? 'sunny-outline' : 'moon-outline'"></ion-icon>
+      </ion-button> -->
+      <ion-button (click)="toggleDarkMode()">
+        <ion-icon [name]="isDarkMode ? 'sunny-outline' : 'moon-outline'"></ion-icon>
+      </ion-button>
+
+      <ion-button (click)="toggleSearchBar()">
+        <ion-icon [name]="isSearchBarVisible ? 'close-outline' : 'search-outline'"></ion-icon>
+      </ion-button>
       <ion-button (click)="openCartModal()">
         <ion-icon name="cart-outline"></ion-icon>
-        <ng-container *ngIf="totalItems$ | async as totalItems">
-          <ion-badge *ngIf="totalItems > 0">{{ totalItems }}</ion-badge>
-        </ng-container>
+        <ion-badge *ngIf="(totalItems$ | async) as totalItems" color="danger">{{ totalItems }}</ion-badge>
       </ion-button>
     </ion-buttons>
 
+    <!-- Ajouter un skeleton loader -->
+<ion-skeleton-text *ngIf="isLoading" animated style="width: 100%; height: 200px;"></ion-skeleton-text>
+
+  </ion-toolbar>
+
+  <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">
+    <ion-segment [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange($event)" scrollable mode="md">
+      <ion-segment-button value="all">
+        <ion-label>Tous</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Viandes & Poissons">
+        <ion-label>Viandes & Poissons</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Epicerie">
+        <ion-label>Epicerie</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Fruits & légumes">
+        <ion-label>Fruits & légumes</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <ion-grid fixed>
+<ion-content class="ion-padding" id="main-content">
+  <div class="sort-container">
+    <ion-select [(ngModel)]="sortOption" (ionChange)="onSortChange($event)" interface="popover" class="custom-select">
+      <ion-select-option value="name">Nom</ion-select-option>
+      <ion-select-option value="price_asc">Prix ↑</ion-select-option>
+      <ion-select-option value="price_desc">Prix ↓</ion-select-option>
+    </ion-select>
+  </div>
+
+  <ion-grid>
     <ion-row>
-      <ion-col size="6" size-md="4" size-lg="3" *ngFor="let product of paginatedProducts">
-        <ion-card class="product-card">
-          <img [src]="product.image" [alt]="product.libelle" (error)="handleImageError($event)">
+      <ion-col size="12" size-sm="6" size-md="4" size-lg="3" *ngFor="let product of paginatedProducts">
+        <ion-card class="product-card" [class.out-of-stock]="product.enRupture">
+          <div class="image-container">
+            <img [src]="product.image" [alt]="product.libelle" (error)="handleImageError($event)">
+          </div>
           <ion-card-header>
             <ion-card-title>{{ product.libelle }}</ion-card-title>
-            <ion-card-subtitle>{{ product.prix | currency:'EUR' }}</ion-card-subtitle>
+            <ion-card-subtitle>
+              <div class="price-promo-container">
+                <ng-container *ngIf="product.enPromo; else regularPrice">
+                  <span class="original-price">{{ product.prix | currency:'EUR' }}</span>
+                  <span class="promo-price">{{ product.prixPromo | currency:'EUR' }}</span>
+                  <ion-badge color="warning" class="promo-badge">Promo</ion-badge>
+                </ng-container>
+                <ng-template #regularPrice>
+                  <span>{{ product.prix | currency:'EUR' }}</span>
+                </ng-template>
+              </div>
+              <ion-badge color="danger" *ngIf="product.enRupture">Rupture</ion-badge>
+            </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
             <p class="product-description">{{ product.description }}</p>
             <ion-item lines="none" class="quantity-control">
-              <ion-button fill="clear" (click)="decrementQuantity(product)">
+              <ion-button fill="clear" (click)="decrementQuantity(product)" [disabled]="product.enRupture">
                 <ion-icon name="remove-circle-outline"></ion-icon>
               </ion-button>
               <ion-label class="ion-text-center">{{ product.quantite }}</ion-label>
-              <ion-button fill="clear" (click)="incrementQuantity(product)">
+              <ion-button fill="clear" (click)="incrementQuantity(product)" [disabled]="product.enRupture">
                 <ion-icon name="add-circle-outline"></ion-icon>
               </ion-button>
             </ion-item>
@@ -43,7 +107,7 @@
   <ion-grid>
     <ion-row class="ion-justify-content-center">
       <ion-col size="auto">
-        <ion-button (click)="prevPage()" [disabled]="currentPage === 1">
+        <ion-button (click)="prevPage()" [disabled]="currentPage === 1" fill="clear">
           <ion-icon name="chevron-back-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-col>
@@ -51,7 +115,7 @@
         <ion-label>Page {{ currentPage }} / {{ totalPages }}</ion-label>
       </ion-col>
       <ion-col size="auto">
-        <ion-button (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <ion-button (click)="nextPage()" [disabled]="currentPage === totalPages" fill="clear">
           <ion-icon name="chevron-forward-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-col>
@@ -59,9 +123,35 @@
   </ion-grid>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar color="light">
-    <ion-title>
+<ion-menu side="start" menuId="main-menu" contentId="main-content">
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Catégories</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item button (click)="selectCategory('all')">
+        <ion-label>Tous</ion-label>
+      </ion-item>
+      <ion-item button (click)="selectCategory('Viandes & Poissons')">
+        <ion-label>Viandes & Poissons</ion-label>
+      </ion-item>
+      <ion-item button (click)="selectCategory('Fruits & légumes')">
+        <ion-label>Fruits & légumes</ion-label>
+      </ion-item>
+      <ion-item button (click)="selectCategory('Epicerie')">
+        <ion-label>Epicerie</ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">
+    <ion-title class="ion-text-center">
       Total : {{ getTotalItems() }} articles - {{ getTotalPrice() | currency:'EUR' }}
     </ion-title>
   </ion-toolbar>

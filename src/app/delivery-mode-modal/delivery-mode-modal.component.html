@@ -1,0 +1,35 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Mode de livraison</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2 class="ion-text-center main-title">
+    Choisissez votre mode de livraison à lambanyi 
+    <ion-icon name="location-outline"></ion-icon>
+  </h2>
+
+  <div class="delivery-options">
+    <div class="option-card" (click)="selectMode('drive')" [class.selected]="selectedMode === 'drive'" [class.inactive]="selectedMode === 'home'">
+      <ion-icon name="car-outline"></ion-icon>
+      <h3>Drive</h3>
+      <p>Récupérez votre commande en magasin</p>
+    </div>
+    <div class="option-card" (click)="selectMode('home')" [class.selected]="selectedMode === 'home'" [class.inactive]="selectedMode === 'drive'">
+      <ion-icon name="home-outline"></ion-icon>
+      <h3>Livraison à domicile</h3>
+      <p>Faites-vous livrer directement chez vous</p>
+    </div>
+  </div>
+
+  <ion-button expand="block" (click)="showConfirmation()" [disabled]="!selectedMode" class="confirm-button">
+    Valider
+  </ion-button>
+</ion-content>
+

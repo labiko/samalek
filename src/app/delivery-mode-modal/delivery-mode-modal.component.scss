@@ -1,0 +1,131 @@
+:host {
+    --ion-background-color: #f4f5f8;
+  }
+  
+  .main-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    color: var(--ion-color-primary);
+  }
+  
+  .delivery-options {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .option-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: calc(50% - 10px);
+    max-width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+  
+    &.selected {
+      border: 2px solid var(--ion-color-primary);
+      background-color: rgba(var(--ion-color-primary-rgb), 0.1);
+    }
+  
+    ion-icon {
+      font-size: 48px;
+      color: var(--ion-color-primary);
+      margin-bottom: 10px;
+    }
+  
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--ion-color-dark);
+    }
+  
+    p {
+      font-size: 14px;
+      color: var(--ion-color-medium);
+    }
+  }
+  
+  .confirm-button {
+    margin-top: 30px;
+  }
+  
+  @media (max-width: 576px) {
+    .option-card {
+      width: 100%;
+      max-width: none;
+    }
+  }
+  
+  .delivery-options {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .option-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    width: calc(50% - 10px);
+    max-width: 200px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+  
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+  
+    &.selected {
+      border-color: var(--ion-color-success);
+      background-color: rgba(var(--ion-color-success-rgb), 0.1);
+    }
+  
+    &.inactive {
+      opacity: 0.3;
+    }
+  
+    ion-icon {
+      font-size: 48px;
+      color: var(--ion-color-primary);
+      margin-bottom: 10px;
+    }
+  
+    h3 {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: var(--ion-color-dark);
+    }
+  
+    p {
+      font-size: 14px;
+      color: var(--ion-color-medium);
+    }
+  }
+  
+  .confirm-button {
+    margin-top: 30px;
+  }
+  
+  @media (max-width: 576px) {
+    .option-card {
+      width: 100%;
+      max-width: none;
+    }
+  }
+  
+    

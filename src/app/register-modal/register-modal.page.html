@@ -1,0 +1,52 @@
+<ion-content>
+  <div class="signup-container">
+    <div class="signup-content">
+      <div class="avatar-container">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </div>
+
+      <h1>Inscription</h1>
+      <p>Créez votre compte pour commencer</p>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="signupForm">
+        <div class="input-group">
+          <ion-icon name="person-outline" color="medium"></ion-icon>
+          <ion-input type="text" placeholder="Prénom" formControlName="prenom"></ion-input>
+        </div>
+
+        <div class="input-group">
+          <ion-icon name="call-outline" color="medium"></ion-icon>
+          <ion-input type="tel" placeholder="Téléphone" formControlName="telephone"></ion-input>
+          <img src="assets/guinea-flag.png" alt="Drapeau de la Guinée" class="flag">
+        </div>
+
+        <ion-button expand="block" type="submit" [disabled]="!signupForm.valid">
+          <ion-icon name="person-add-outline" slot="start"></ion-icon>
+          S'inscrire
+        </ion-button>
+      </form>
+
+      <!-- <div class="login-link">
+        <p>Vous avez déjà un compte ?</p>
+        <ion-button fill="clear" (click)="goToLogin()">Se connecter</ion-button>
+      </div> -->
+      <div class="signup-link">
+        <p>Vous avez déjà un compte ?</p>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="6">
+              <ion-button fill="clear" (click)="goToLogin()">Se connecter</ion-button>
+            </ion-col>
+            <ion-col size="6">
+              <ion-button expand="block" fill="clear" color="danger" (click)="dismiss()">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                Fermer
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
