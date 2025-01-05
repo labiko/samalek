@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { IonContent, AnimationController, ModalController, Platform, MenuController } from '@ionic/angular';
-import { Product, ProductService } from '../services/product.service';
+import {  ProductService } from '../services/product.service';
 import { CartModalComponent } from '../cart-modal/cart-modal.component';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { BehaviorSubject, Observable, timer, Subscription ,of} from 'rxjs';
 import { switchMap, shareReplay } from 'rxjs/operators';
+import { SamalekProduct } from '../models/samalek-product.model';
 
 @Component({
   selector: 'app-tab1',
@@ -37,11 +38,12 @@ export class Tab1Page implements OnInit, OnDestroy {
   @ViewChild(IonContent, { static: false }) content!: IonContent;
 
   isLoading = false;
-  products: Product[] = [];
-  filteredProducts: Product[] = [];
+  products: SamalekProduct[] = [];
+  filteredProducts: SamalekProduct[] = [];
   currentPage = 1;
   itemsPerPage = 20;
-  cartItems$: Observable<Product[]>;
+  // cartItems$: Observable<SamalekProduct[]>;
+  cartItems$: Observable<{product: SamalekProduct, quantity: number, price: number}[]>;
   totalItems$: Observable<number>;
   totalPrice$: Observable<number>;
 
@@ -54,7 +56,7 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   private productsSubject = new BehaviorSubject<void>(undefined);
   private subscription: Subscription = new Subscription();
-  products$: Observable<Product[]> = of([]); // Initialisation avec un Observable vide
+  products$: Observable<SamalekProduct[]> = of([]); // Initialisation avec un Observable vide
 
   constructor(
     private productService: ProductService,
@@ -92,6 +94,7 @@ export class Tab1Page implements OnInit, OnDestroy {
       products => {
         this.isLoading = false;
         this.products = products;
+        console.log(  this.products)
         this.applyFilters();
         this.animateProducts();
       },
@@ -109,6 +112,7 @@ export class Tab1Page implements OnInit, OnDestroy {
 
   loadProducts() {
     this.productsSubject.next();
+    console.log(this.productsSubject.value)
   }
 
   ngOnDestroy() {
@@ -149,7 +153,7 @@ export class Tab1Page implements OnInit, OnDestroy {
   applyFilters() {
     this.filteredProducts = this.products
       .filter(product => {
-        const matchesSearch = product.libelle.toLowerCase().includes(this.searchTerm.toLowerCase());
+        const matchesSearch = product.Libelle.toLowerCase().includes(this.searchTerm.toLowerCase());
         const matchesCategory = this.selectedCategory === 'all' || product.category === this.selectedCategory;
         return matchesSearch && matchesCategory;
       });
@@ -161,11 +165,11 @@ export class Tab1Page implements OnInit, OnDestroy {
   sortProducts() {
     this.filteredProducts.sort((a, b) => {
       if (this.sortOption === 'name') {
-        return a.libelle.localeCompare(b.libelle);
+        return a.Libelle.localeCompare(b.Libelle);
       } else if (this.sortOption === 'price_asc') {
-        return a.prix - b.prix;
+        return a.Prix - b.Prix;
       } else if (this.sortOption === 'price_desc') {
-        return b.prix - a.prix;
+        return b.Prix - a.Prix;
       }
       return 0;
     });
@@ -195,26 +199,37 @@ export class Tab1Page implements OnInit, OnDestroy {
     this.isSearchBarVisible = !this.isSearchBarVisible;
   }
 
-  incrementQuantity(product: Product) {
-    if (!product.enRupture) {
-      this.productService.updateProductQuantity(product.id, product.quantite + 1);
-      this.animateCart();
+  // incrementQuantity(product: SamalekProduct) {
+  //   if (!product.EnRupture) {
+  //     this.productService.incrementQuantity(product.Id);
+  //   }
+  // }
+
+  // decrementQuantity(product: SamalekProduct) {
+  //   if (!product.EnRupture && product.Quantite > 0) {
+  //     this.productService.decrementQuantity(product.Id);
+  //   }
+  // }
+
+  incrementQuantity(product: SamalekProduct) {
+    if (!product.EnRupture) {
+      this.productService.incrementQuantity(product.Id);
     }
   }
 
-  decrementQuantity(product: Product) {
-    if (!product.enRupture && product.quantite > 0) {
-      this.productService.updateProductQuantity(product.id, product.quantite - 1);
-      this.animateCart();
+  decrementQuantity(product: SamalekProduct) {
+    if (!product.EnRupture && product.Quantite > 0) {
+      this.productService.decrementQuantity(product.Id);
     }
   }
+  
 
   getTotalItems() {
-    return this.filteredProducts.reduce((total, product) => total + product.quantite, 0);
+    return this.filteredProducts.reduce((total, product) => total + product.Quantite, 0);
   }
 
   getTotalPrice() {
-    return this.filteredProducts.reduce((total, product) => total + (product.prix * product.quantite), 0);
+    return this.filteredProducts.reduce((total, product) => total + (product.Prix * product.Quantite), 0);
   }
 
   animateCart() {

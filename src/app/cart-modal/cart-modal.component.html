@@ -13,39 +13,74 @@
   <ion-content class="ion-padding">
     <ng-container *ngIf="cartItems.length > 0; else emptyCart">
       <ion-list>
-        <ion-item-sliding *ngFor="let item of cartItems">
+        <!-- <ion-item-sliding *ngFor="let item of cartItems">
           <ion-item>
             <ion-thumbnail slot="start">
-              <img [src]="item.image" [alt]="item.libelle" (error)="handleImageError($event)">
+              <img [src]="item.Image" [alt]="item.Libelle" (error)="handleImageError($event)">
             </ion-thumbnail>
             <ion-label>
-              <h2>{{ item.libelle }}</h2>
-              <p>{{ item.prix | currency:'EUR':'symbol':'1.0-0' }}</p>
+              <h2>{{ item.Libelle }}</h2>
+              <p>
+                <ng-container *ngIf="item.EnPromo && item.PrixPromo !== undefined; else regularPrice">
+                  <span class="original-price">{{ item.Prix | currency:'EUR':'symbol':'1.0-2' }}</span>
+                  <span class="promo-price">{{ item.PrixPromo | currency:'EUR':'symbol':'1.0-2' }}</span>
+                </ng-container>
+                <ng-template #regularPrice>
+                  {{ item.Prix | currency:'EUR':'symbol':'1.0-2' }}
+                </ng-template>
+              </p>
             </ion-label>
             <ion-note slot="end">
-              <ion-button fill="clear" (click)="decrementQuantity(item.id)">
+              <ion-button fill="clear" (click)="decrementQuantity(item)">
                 <ion-icon name="remove-circle-outline"></ion-icon>
               </ion-button>
-              <span>{{ item.quantite }}</span>
-              <ion-button fill="clear" (click)="incrementQuantity(item.id)">
+              <span>{{ item.Quantite }}</span>
+              <ion-button fill="clear" (click)="incrementQuantity(item)">
                 <ion-icon name="add-circle-outline"></ion-icon>
               </ion-button>
             </ion-note>
           </ion-item>
           <ion-item-options side="end">
-            <ion-item-option color="danger" (click)="removeItem(item.id)">
+            <ion-item-option color="danger" (click)="removeItem(item.Id)">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding> -->
+        <ion-item-sliding *ngFor="let item of cartItems$ | async">
+          <ion-item>
+            <ion-thumbnail slot="start">
+              <img [src]="item.product.Image" [alt]="item.product.Libelle" (error)="handleImageError($event)">
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.product.Libelle }}</h2>
+              <p>{{ item.price | currency:'EUR':'symbol':'1.0-2' }}</p>
+            </ion-label>
+            <ion-note slot="end">
+              <ion-button fill="clear" (click)="decrementQuantity(item)">
+                <ion-icon name="remove-circle-outline"></ion-icon>
+              </ion-button>
+              <span>{{ item.quantity }}</span>
+              <ion-button fill="clear" (click)="incrementQuantity(item)">
+                <ion-icon name="add-circle-outline"></ion-icon>
+              </ion-button>
+            </ion-note>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="removeItem(item.product.Id)">
               <ion-icon slot="icon-only" name="trash"></ion-icon>
             </ion-item-option>
           </ion-item-options>
         </ion-item-sliding>
+        
+        
       </ion-list>
-
       <div class="total-section">
         <ion-text color="medium">Total</ion-text>
-        <ion-text color="dark" class="total-price">{{ totalPrice$ | async | currency:'GNF':'symbol':'1.0-0' }}</ion-text>
+        <ion-text color="dark" class="total-price">
+          {{ totalPrice$ | async | currency:'EUR':'symbol':'1.0-2' }}
+        </ion-text>
       </div>
     </ng-container>
-
     <ng-template #emptyCart>
       <div class="empty-cart">
         <ion-icon name="cart-outline" class="large-icon"></ion-icon>
@@ -54,7 +89,6 @@
       </div>
     </ng-template>
   </ion-content>
-
   <ion-footer *ngIf="cartItems.length > 0">
     <ion-toolbar>
       <ion-button expand="block" (click)="checkout()" [disabled]="isLoading">
@@ -69,7 +103,5 @@
       </ion-button>
     </ion-toolbar>
   </ion-footer>
-  
-  
 </ng-container>
 

@@ -1,11 +1,12 @@
 import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Product, ProductService } from '../services/product.service';
+import { ProductService } from '../services/product.service';
 import { ModalController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { PaiementSelectComponent } from '../paiement-select/paiement-select.component';
 import { LoginModalPage } from '../login-modal/login-modal.page';
+import { SamalekProduct } from '../models/samalek-product.model';
 interface CartItem {
   id: number;
   libelle: string;
@@ -25,26 +26,44 @@ interface CartItem {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class CartModalComponent implements OnInit {
-  @Input() cartItems: Product[] = [];
+  cartItems$: Observable<{product: SamalekProduct, quantity: number, price: number}[]>;
+  @Input() cartItems: SamalekProduct[] = [];
   @Input() total: number = 0;
-  cartItems$: Observable<Product[]>;
   totalItems$: Observable<number>;
   totalPrice$: Observable<number>;
   isLoading: boolean = false;
   loadingMessage: string = 'Traitement en cours...';
   constructor(private modalController: ModalController, private productService: ProductService) {
+
     this.cartItems$ = this.productService.getCartItems();
     this.totalItems$ = this.productService.getTotalItems();
     this.totalPrice$ = this.productService.getTotalPrice();
   }
   ngOnInit() { }
 
-  incrementQuantity(productId: number) {
-    this.productService.incrementQuantity(productId);
+
+  // incrementQuantity(product: SamalekProduct) {
+  //   if (!product.EnRupture) {
+  //     this.productService.incrementQuantity(product.Id);
+  //   }
+  // }
+
+  // decrementQuantity(product: SamalekProduct) {
+  //   if (!product.EnRupture && product.Quantite > 0) {
+  //     this.productService.decrementQuantity(product.Id);
+  //   }
+  // }
+
+  incrementQuantity(item: {product: SamalekProduct, quantity: number, price: number}) {
+    if (!item.product.EnRupture) {
+      this.productService.incrementQuantity(item.product.Id);
+    }
   }
 
-  decrementQuantity(productId: number) {
-    this.productService.decrementQuantity(productId);
+  decrementQuantity(item: {product: SamalekProduct, quantity: number, price: number}) {
+    if (!item.product.EnRupture && item.quantity > 0) {
+      this.productService.decrementQuantity(item.product.Id);
+    }
   }
 
   removeItem(productId: number) {
@@ -72,7 +91,7 @@ export class CartModalComponent implements OnInit {
   async checkout() {
     const modal = await this.modalController.create({
       component: LoginModalPage,
-       cssClass: 'fullscreen-modal'
+      cssClass: 'fullscreen-modal'
     });
 
     modal.onDidDismiss().then((result) => {
@@ -97,4 +116,6 @@ export class CartModalComponent implements OnInit {
     });
     return await modal.present();
   }
+
+  
 }

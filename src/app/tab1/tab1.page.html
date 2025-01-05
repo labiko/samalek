@@ -67,34 +67,34 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-sm="6" size-md="4" size-lg="3" *ngFor="let product of paginatedProducts">
-        <ion-card class="product-card" [class.out-of-stock]="product.enRupture">
+        <ion-card class="product-card" [class.out-of-stock]="product.EnRupture">
           <div class="image-container">
-            <img [src]="product.image" [alt]="product.libelle" (error)="handleImageError($event)">
+            <img [src]="product.Image" [alt]="product.Libelle" (error)="handleImageError($event)">
           </div>
           <ion-card-header>
-            <ion-card-title>{{ product.libelle }}</ion-card-title>
+            <ion-card-title>{{ product.Libelle }}</ion-card-title>
             <ion-card-subtitle>
               <div class="price-promo-container">
-                <ng-container *ngIf="product.enPromo; else regularPrice">
-                  <span class="original-price">{{ product.prix | currency:'EUR' }}</span>
-                  <span class="promo-price">{{ product.prixPromo | currency:'EUR' }}</span>
+                <ng-container *ngIf="product.EnPromo; else regularPrice">
+                  <span class="original-price">{{ product.Prix | currency:'EUR' }}</span>
+                  <span class="promo-price">{{ product.PrixPromo | currency:'EUR' }}</span>
                   <ion-badge color="warning" class="promo-badge">Promo</ion-badge>
                 </ng-container>
                 <ng-template #regularPrice>
-                  <span>{{ product.prix | currency:'EUR' }}</span>
+                  <span>{{ product.Prix | currency:'EUR' }}</span>
                 </ng-template>
               </div>
-              <ion-badge color="danger" *ngIf="product.enRupture">Rupture</ion-badge>
+              <ion-badge color="danger" *ngIf="product.EnRupture">Rupture</ion-badge>
             </ion-card-subtitle>
           </ion-card-header>
           <ion-card-content>
-            <p class="product-description">{{ product.description }}</p>
+            <p class="product-description">{{ product.Description }}</p>
             <ion-item lines="none" class="quantity-control">
-              <ion-button fill="clear" (click)="decrementQuantity(product)" [disabled]="product.enRupture">
+              <ion-button fill="clear" (click)="decrementQuantity(product)" [disabled]="product.EnRupture">
                 <ion-icon name="remove-circle-outline"></ion-icon>
               </ion-button>
-              <ion-label class="ion-text-center">{{ product.quantite }}</ion-label>
-              <ion-button fill="clear" (click)="incrementQuantity(product)" [disabled]="product.enRupture">
+              <ion-label class="ion-text-center">{{ product.QuantiteProduit }}</ion-label>
+              <ion-button fill="clear" (click)="incrementQuantity(product)" [disabled]="product.EnRupture">
                 <ion-icon name="add-circle-outline"></ion-icon>
               </ion-button>
             </ion-item>
@@ -147,13 +147,21 @@
   </ion-content>
 </ion-menu>
 
-
-
-<ion-footer class="ion-no-border">
+<!-- <ion-footer class="ion-no-border">
   <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">
     <ion-title class="ion-text-center">
       Total : {{ getTotalItems() }} articles - {{ getTotalPrice() | currency:'EUR' }}
     </ion-title>
   </ion-toolbar>
+</ion-footer> -->
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">
+    <ion-title class="ion-text-center">
+      Total : {{ totalItems$ | async }} articles - {{ totalPrice$ | async | currency:'EUR' }}
+    </ion-title>
+  </ion-toolbar>
 </ion-footer>
+
+
 
