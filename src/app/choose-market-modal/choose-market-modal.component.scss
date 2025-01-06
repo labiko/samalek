@@ -1,0 +1,36 @@
+.market-item {
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .market-item:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .market-item.selected {
+    border: 2px solid #28a745; /* Vert pour indiquer la sélection */
+    background-color: #e9f7ef; /* Légèrement vert clair */
+  }
+  
+  .market-icon {
+    color: #6c757d;
+    font-size: 24px;
+  }
+  
+  .check-icon {
+    color: #28a745; /* Vert */
+  }
+  
+  .confirm-button {
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .market-list {
+    padding-top: 12px;
+  }
+  

@@ -1,0 +1,43 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="light">
+    <ion-title class="ion-text-center">Choisir un marché</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list lines="none" class="market-list">
+    <ion-item *ngFor="let market of markets$ | async" 
+              class="market-item" 
+              [class.selected]="selectedMarket?.Id === market.Id"
+              (click)="selectMarket(market)">
+      <ion-icon name="storefront-outline" slot="start" class="market-icon"></ion-icon>
+      <ion-label>
+        <h2>{{ market.Nom }}</h2>
+        <p>{{ market.Description }}</p>
+      </ion-label>
+      <ion-icon name="checkmark-circle" slot="end" *ngIf="selectedMarket?.Id === market.Id" class="check-icon"></ion-icon>
+    </ion-item>
+  </ion-list>
+
+  <div *ngIf="(markets$ | async)?.length === 0" class="ion-text-center ion-padding">
+    <ion-icon name="alert-circle-outline" size="large" color="medium"></ion-icon>
+    <p>Aucun marché disponible pour le moment.</p>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-button expand="block" 
+                (click)="confirmSelection()" 
+                [disabled]="!selectedMarket" 
+                color="primary"
+                class="confirm-button">
+      Confirmer la sélection
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

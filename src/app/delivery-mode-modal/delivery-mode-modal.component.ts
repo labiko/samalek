@@ -50,25 +50,22 @@ export class DeliveryModeModalComponent implements OnInit {
   }
 
   async confirm() {
-    // Fermer la modal actuelle
-    await this.modalController.dismiss({
-      deliveryMode: this.selectedMode
-    });
+    
+    // await this.modalController.dismiss({
+    //   deliveryMode: this.selectedMode
+    // });
 
-    // Fermer toutes les autres modales potentiellement ouvertes
-    const modalElements = document.getElementsByTagName('ion-modal');
-    for (let i = modalElements.length - 1; i >= 0; i--) {
-      const modalElement = modalElements[i] as HTMLIonModalElement;
-      if (modalElement.dismiss) {
-        await modalElement.dismiss();
-      }
-    }
+    // const modalElements = document.getElementsByTagName('ion-modal');
+    // for (let i = modalElements.length - 1; i >= 0; i--) {
+    //   const modalElement = modalElements[i] as HTMLIonModalElement;
+    //   if (modalElement.dismiss) {
+    //     await modalElement.dismiss();
+    //   }
+    // }
 
-    // Attendre un court instant pour s'assurer que toutes les modales sont fermées
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // await new Promise(resolve => setTimeout(resolve, 100));
 
-    // Utiliser NavController pour la navigation
-    this.navController.navigateRoot('/tabs/tab2');
+    // this.navController.navigateRoot('/tabs/tab2');
 
   }
 

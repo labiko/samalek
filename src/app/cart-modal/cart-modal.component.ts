@@ -3,10 +3,14 @@ import { ProductService } from '../services/product.service';
 import { ModalController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { PaiementSelectComponent } from '../paiement-select/paiement-select.component';
 import { LoginModalPage } from '../login-modal/login-modal.page';
 import { SamalekProduct } from '../models/samalek-product.model';
+import { ClientService } from '../client.service';
+import { GlobalService } from '../global.service';
+import { SamalekClient } from '../models/SamalekClient';
+
 interface CartItem {
   id: number;
   libelle: string;
@@ -26,41 +30,85 @@ interface CartItem {
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class CartModalComponent implements OnInit {
-  cartItems$: Observable<{product: SamalekProduct, quantity: number, price: number}[]>;
-  @Input() cartItems: SamalekProduct[] = [];
+  cartItems$: Observable<{ product: SamalekProduct, quantity: number, price: number }[]>;
+
+  @Input() cartItems: { product: SamalekProduct, quantity: number, price: number }[] = [];
+  // @Input() cartItems: { product: SamalekProduct, quantity: number, price: number, client: SamalekClient }[] = [];
+
   @Input() total: number = 0;
   totalItems$: Observable<number>;
   totalPrice$: Observable<number>;
   isLoading: boolean = false;
   loadingMessage: string = 'Traitement en cours...';
-  constructor(private modalController: ModalController, private productService: ProductService) {
+  private cartItemsSubscription: Subscription | undefined;
+  constructor(private modalController: ModalController, private productService: ProductService,
+    private clientService: ClientService, private GlobalService: GlobalService
+  ) {
 
     this.cartItems$ = this.productService.getCartItems();
     this.totalItems$ = this.productService.getTotalItems();
     this.totalPrice$ = this.productService.getTotalPrice();
   }
-  ngOnInit() { }
 
+  ngOnInit() {
+    this.subscribeToCartItems();
+  }
 
-  // incrementQuantity(product: SamalekProduct) {
-  //   if (!product.EnRupture) {
-  //     this.productService.incrementQuantity(product.Id);
-  //   }
+  ngOnDestroy() {
+    if (this.cartItemsSubscription) {
+      this.cartItemsSubscription.unsubscribe();
+    }
+  }
+
+  // private subscribeToCartItems(client?: SamalekClient) {
+  //   this.cartItemsSubscription = this.cartItems$.subscribe({
+  //     next: (items) => {
+  //       this.cartItems = items.map(item => ({
+  //         ...item,
+  //         client: {
+  //           Email: client?.Email,
+  //           Telephone: client?.Telephone,
+  //           Id: client?.Id,
+  //           Nom: client?.Nom,
+  //           Prenom: client?.Prenom
+  //         }
+  //       }));
+  //       console.log('Cart items updated:', this.cartItems);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching cart items:', error);
+  //     }
+  //   });
   // }
 
-  // decrementQuantity(product: SamalekProduct) {
-  //   if (!product.EnRupture && product.Quantite > 0) {
-  //     this.productService.decrementQuantity(product.Id);
-  //   }
-  // }
+  private subscribeToCartItems() {
+    this.cartItemsSubscription = this.cartItems$.subscribe({
+      next: (items) => {
+        this.cartItems = items.map(item => ({
+          ...item
+          // client: {
+          //   Email: null,
+          //   Telephone: null,
+          //   Id: null,
+          //   Nom: null,
+          //   Prenom: null
+          // }
+        }));
+        console.log('Cart items updated:', this.cartItems);
+      },
+      error: (error) => {
+        console.error('Error fetching cart items:', error);
+      }
+    });
+  }
 
-  incrementQuantity(item: {product: SamalekProduct, quantity: number, price: number}) {
+  incrementQuantity(item: { product: SamalekProduct, quantity: number, price: number }) {
     if (!item.product.EnRupture) {
       this.productService.incrementQuantity(item.product.Id);
     }
   }
 
-  decrementQuantity(item: {product: SamalekProduct, quantity: number, price: number}) {
+  decrementQuantity(item: { product: SamalekProduct, quantity: number, price: number }) {
     if (!item.product.EnRupture && item.quantity > 0) {
       this.productService.decrementQuantity(item.product.Id);
     }
@@ -88,21 +136,27 @@ export class CartModalComponent implements OnInit {
   //   this.OpenModalPaiementSelect();
   // }
 
-  async checkout() {
-    const modal = await this.modalController.create({
-      component: LoginModalPage,
-      cssClass: 'fullscreen-modal'
-    });
+  async CallModalModePaiement() {
+    // console.log(this.clientService.isLoggedIn())
+    if (!this.clientService.isLoggedIn())
+      return this.clientService.MsgLoginRequired()
+    this.GlobalService.OpenModalPaiementSelect()
 
-    modal.onDidDismiss().then((result) => {
-      if (result && result.data && result.data.logged) {
-        // L'utilisateur s'est connecté avec succès
-        console.log('Utilisateur connecté, procéder au paiement');
-        // Ajoutez ici la logique pour passer au paiement
-      }
-    });
+    // const userInfo = await this.GlobalService.getUserInfo();
+    // const samalekClient: SamalekClient = {
+    //   Id: userInfo.Id,
+    //   Nom: userInfo.Nom,
+    //   Prenom: userInfo.Prenom,
+    //   Email: userInfo.Email,
+    //   Telephone: userInfo.Telephone,
+    // };
 
-    return await modal.present();
+    // this.cartItems = this.cartItems.map(item => ({
+    //   ...item,
+    //   client: samalekClient
+    // }));
+
+    console.log(this.cartItems)
   }
 
 
@@ -117,5 +171,5 @@ export class CartModalComponent implements OnInit {
     return await modal.present();
   }
 
-  
+
 }

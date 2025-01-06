@@ -1,4 +1,5 @@
 import { SamalekCategory } from "./samalek-category.model";
+import { SamalekClient } from "./SamalekClient";
 
 export interface SamalekProduct {
     Id: number;
@@ -12,4 +13,6 @@ export interface SamalekProduct {
     category: string;
     EnPromo: boolean;
     PrixPromo?: number;
+    CategoryName: string
+    Client : SamalekClient
   }

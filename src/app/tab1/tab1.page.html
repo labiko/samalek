@@ -38,10 +38,12 @@
   </ion-toolbar>
 
   <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">
-    <ion-segment [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange($event)" scrollable mode="md">
+    <!-- <ion-segment [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange($event)" scrollable mode="md">
+      
       <ion-segment-button value="all">
         <ion-label>Tous</ion-label>
       </ion-segment-button>
+      
       <ion-segment-button value="Viandes & Poissons">
         <ion-label>Viandes & Poissons</ion-label>
       </ion-segment-button>
@@ -51,7 +53,22 @@
       <ion-segment-button value="Fruits & légumes">
         <ion-label>Fruits & légumes</ion-label>
       </ion-segment-button>
+    </ion-segment> -->
+
+    <ion-segment [(ngModel)]="selectedCategory" (ionChange)="onCategoryChange($event)" scrollable mode="md">
+      <ion-segment-button value="all">
+        <ion-label>Tous</ion-label>
+      </ion-segment-button>
+      
+      <ng-container *ngIf="categories$ | async as categories">
+        <ion-segment-button *ngFor="let category of categories" [value]="category.Name">
+          <ion-label>{{ category.Name }}</ion-label>
+        </ion-segment-button>
+      </ng-container>
     </ion-segment>
+    
+
+    
   </ion-toolbar>
 </ion-header>
 
@@ -146,14 +163,6 @@
     </ion-list>
   </ion-content>
 </ion-menu>
-
-<!-- <ion-footer class="ion-no-border">
-  <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">
-    <ion-title class="ion-text-center">
-      Total : {{ getTotalItems() }} articles - {{ getTotalPrice() | currency:'EUR' }}
-    </ion-title>
-  </ion-toolbar>
-</ion-footer> -->
 
 <ion-footer class="ion-no-border">
   <ion-toolbar color="light" class="hide-on-mobile ion-padding-horizontal">

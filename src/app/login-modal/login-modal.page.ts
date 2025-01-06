@@ -6,6 +6,8 @@ import { IonicModule, ModalController, NavController } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PaiementSelectComponent } from '../paiement-select/paiement-select.component';
 import { RegisterModalPage } from '../register-modal/register-modal.page';
+import { ClientService } from '../client.service';
+import { GlobalService } from '../global.service';
 @Component({
   selector: 'app-login-modal',
   templateUrl: './login-modal.page.html',
@@ -20,41 +22,43 @@ export class LoginModalPage implements OnInit {
   loadingMessage: string = 'Traitement en cours...';
   constructor(
     private formBuilder: FormBuilder,
-    private modalController: ModalController
+    private modalController: ModalController, private clientService: ClientService,private GlobalService : GlobalService
   ) {
     this.loginForm = this.formBuilder.group({
       telephone: ['', [Validators.required, Validators.minLength(9)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
- async onSubmit() {
+  async onSubmit() {
     if (this.loginForm.valid) {
-      // Implémentez ici la logique de connexion
-      console.log('Form submitted', this.loginForm.value);
-      this.modalController.dismiss({ logged: true });
+      console.log(this.loginForm.value)
 
-     this.isLoading = true;
-    this.loadingMessage = 'Initialisation du paiement...';
-    this.loadingMessage = 'Vérification du panier...';
-    this.loadingMessage = 'Finalisation de la transaction...';
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // Ajoutez ici la logique de paiement réelle
-    this.isLoading = false;
-    this.loadingMessage = 'Traitement en cours...'; // Réinitialiser le message
-    this.OpenModalPaiementSelect();
+      this.clientService.login(this.loginForm.value.telephone, this.loginForm.value.password).subscribe({
+        next: (response) => {
+          if (response != null) {
+            this.modalController.dismiss({ logged: true });
+            this.GlobalService.OpenModalPaiementSelect();
+          }
+          else {
+            this.clientService.MsgBadCredential()
+          }
+        },
+        error: (error) => {
+          this.clientService.MsgBadCredential()
+          console.error('Erreur de connexion', error);
+        }
+      });
     }
   }
 
-  
-    async OpenModalPaiementSelect() {
-      const modal = await this.modalController.create({
-        component: PaiementSelectComponent,
-      });
-      return await modal.present();
-    }
+  onLogin(username: string, password: string) {
+
+  }
+
+
   dismiss() {
     this.modalController.dismiss();
   }
@@ -65,5 +69,5 @@ export class LoginModalPage implements OnInit {
     });
     return await modal.present();
   }
-  
+
 }

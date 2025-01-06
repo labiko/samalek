@@ -264,10 +264,6 @@ ion-modal.modal-auto-height {
 	--box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
   
-	  
-
-
-
   html, body {
 	height: 100%;
   }
@@ -280,4 +276,7 @@ ion-modal.modal-auto-height {
 	overflow-y: auto !important;
   }
   
+  .custom-toast-message {
+	text-align: center;
+  }
   
